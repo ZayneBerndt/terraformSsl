@@ -27,3 +27,16 @@ resource "azurerm_app_service_custom_hostname_binding" "demo" {
   resource_group_name = "${azurerm_resource_group.demo.name}"
 }
 
+resource "null_resource" "azure-cli" {
+  
+  provisioner "local-exec" {
+    command = "ssl-script.sh"
+
+    environment {
+      webappname = "${azurerm_app_service.demo.name}"
+      resourceGroup = ${azurerm_resource_group.demo.name}
+    }
+  }
+
+  depends_on = ["azurerm_app_service_custom_hostname_binding.demo"]
+}
